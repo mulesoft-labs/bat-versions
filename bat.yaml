@@ -1,0 +1,11 @@
+files:
+ - file: versions.dwl
+
+suite:
+  name: "BAT Reports"
+  triggers:
+    - cron: 0 * * * * # run default configuration every 1 hour
+
+reporters:
+  - file: reporters/Versions.dwl
+    outFile: versions.html
