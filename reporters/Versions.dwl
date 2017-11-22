@@ -88,13 +88,13 @@ var config = {
     },
     jenkins: {
       analytics: {
-        domain: 'https://jenkins-0.prod.build.msap.io/job/BAT%20(API%20Testing)/job/bat-analytics-service/job/master/api/json?pretty=true'
+        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-analytics-service/job/master/api/json?pretty=true'
       },
       artifacts: {
-        domain: 'https://jenkins.prod.build.msap.io/job/BAT%20(API%20Testing)/job/bat-asset-provider/job/master/api/json?pretty=true'
+        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-asset-provider/job/master/api/json?pretty=true'
       },
       results: {
-        domain: 'https://localhost:8080/job/BAT%20(API%20Testing)/job/bat-asset-provider/job/master/api/json?pretty=true'
+        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-asset-provider/job/master/api/json?pretty=true'
       },
       scheduler: {
         domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-scheduler-service/job/master/api/json?pretty=true'
@@ -130,7 +130,7 @@ fun findVersions(service: String) = do {
     var jenkinsVersion = [
       GET `$(config.services.jenkins[service].domain)` with {
           headers: {
-            Authorization: "Basic ZmVybmFuZG8uZmVycmFyYXp6bzpNdWxlMTIzNGZlcg=="
+            Authorization: "Basic xxx"
           }
         }
     ] map {
