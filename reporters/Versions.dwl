@@ -85,32 +85,6 @@ var config = {
       worker: {
         domain: 'https://bat-worker.stgx.msap.io'
       }
-    },
-    jenkins: {
-      analytics: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-analytics-service/job/master/api/json?pretty=true'
-      },
-      artifacts: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-asset-provider/job/master/api/json?pretty=true'
-      },
-      results: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-asset-provider/job/master/api/json?pretty=true'
-      },
-      scheduler: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-scheduler-service/job/master/api/json?pretty=true'
-      },
-      execution: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-execution-service/job/master/api/json?pretty=true'
-      },
-      cliXapi: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-cli-xapi/job/master/api/json?pretty=true'
-      },
-      xapi: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-xapi/job/master/api/json?pretty=true'
-      },
-      worker: {
-        domain: 'https://jenkins.build.msap.io/job/BAT%20(API%20Testing)/job/bat-worker-service/job/master/api/json?pretty=true'
-      }
     }
   }
 }
@@ -127,20 +101,11 @@ fun findVersions(service: String) = do {
     ] map {
         td: "$($.result.response.body.version default 'Unknown')"
     }
-    var jenkinsVersion = [
-      GET `$(config.services.jenkins[service].domain)` with {
-          headers: {
-            Authorization: "Basic xxx"
-          }
-        }
-    ] map {
-      td: $.result.response.body.lastCompletedBuild.number 
-    }
     ---
     tr: {
         td: "$(service)",
         (cols),
-        (jenkinsVersion)
+        (td: "$((cols[1] == cols[2]) and (cols[2] == cols[0]))")
     }
 }
 ---
@@ -159,7 +124,7 @@ html: {
         th: 
           b: 'Stgx',
         th: 
-          b: 'Jenkins'
+          b: 'Convergence'
       },
       (findVersions('analytics')),
       (findVersions('artifacts')),
