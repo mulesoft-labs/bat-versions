@@ -4,7 +4,7 @@ files:
 suite:
   name: "BAT Reports"
   triggers:
-    - cron: 0 * * * * # run default configuration every 1 hour
+    - cron: 0 0/5 * 1/1 * ? * # run default configuration every 1 hour
 
 reporters:
   - file: reporters/Versions.dwl
