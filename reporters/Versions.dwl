@@ -90,50 +90,79 @@ var config = {
 }
 
 fun array2obj(array: Array<Object>) =
-    array reduce (item, carry = {}) ->
-        carry ++ item
+  array reduce (item, carry = {}) -> carry ++ item
 
 fun findVersions(service: String) = do {
-    var cols = [
-        GET `$(config.services.devx[service].domain)/v1/status` with {},
-        GET `$(config.services.qax[service].domain)/v1/status` with {},
-        GET `$(config.services.stgx[service].domain)/v1/status` with {}
-    ] map {
-        td: "$($.result.response.body.version default 'Unknown')"
-    }
-    ---
+  var cols = [
+    GET `$(config.services.devx[service].domain)/v1/status` with {},
+    GET `$(config.services.qax[service].domain)/v1/status` with {},
+    GET `$(config.services.stgx[service].domain)/v1/status` with {}
+  ] map {
+    td: "$($.result.response.body.version default 'Unknown')"
+  }
+  ---
+
     tr: {
-        td: "$(service)",
-        (cols),
-        (td: "$((cols[1] == cols[2]) and (cols[2] == cols[0]))")
+      td: "$(service)",
+      (cols),
+      (
+        td: "$((cols[1] == cols[2]) and (cols[2] == cols[0]))"
+      )
     }
+
 }
 ---
-html: {
-  head: {},
-  body: {
-    h1: 'Services',
-    table: {
-      tr: {
-        th: 
-          b: 'Service',
-        th: 
-          b: 'Devx',
-        th: 
-          b: 'Qax',
-        th: 
-          b: 'Stgx',
-        th: 
-          b: 'Convergence'
-      },
-      (findVersions('analytics')),
-      (findVersions('artifacts')),
-      (findVersions('results')),
-      (findVersions('cliXapi')),
-      (findVersions('execution')),
-      (findVersions('scheduler')),
-      (findVersions('worker')),
-      (findVersions('xapi'))
+  html: {
+    head: {
+      style @('type': "text/css"): `
+         {
+              font-family: "Trebuchet MS", 40px Arial, Helvetica, sans-serif;
+              font-size: 350%;
+              border-collapse: collapse;
+              width: 100%;
+          }
+
+          td,  th {
+              font-size: 350%;
+              border: 1px solid #ddd;
+              padding: 8px;
+          }
+
+          tr:nth-child(even){background-color: #f2f2f2;}
+
+          tr:hover {background-color: #ddd;}
+
+          th {
+              padding-top: 12px;
+              padding-bottom: 12px;
+              text-align: left;
+              background-color: #4CAF50;
+              color: white;
+          }       
+        `
+    },
+    body: {
+      table: {
+        tr: {
+          th: 
+            b: 'Service',
+          th: 
+            b: 'Devx',
+          th: 
+            b: 'Qax',
+          th: 
+            b: 'Stgx',
+          th: 
+            b: 'Convergence'
+        },
+        (findVersions('analytics')),
+        (findVersions('artifacts')),
+        (findVersions('results')),
+        (findVersions('cliXapi')),
+        (findVersions('execution')),
+        (findVersions('scheduler')),
+        (findVersions('worker')),
+        (findVersions('xapi'))
+      }
     }
   }
-}
