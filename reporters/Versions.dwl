@@ -117,6 +117,7 @@ fun findVersions(service: String) = do {
 ---
   html: {
     head: {
+      meta @('http-equiv':"refresh", 'content':"30"): '',
       style @('type': "text/css"): `
          {
               font-family: "Trebuchet MS", 40px Arial, Helvetica, sans-serif;
