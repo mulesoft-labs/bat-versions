@@ -106,7 +106,10 @@ fun findVersions(service: String) = do {
       td: "$(service)",
       (cols),
       (
-        td: "$((cols[1] == cols[2]) and (cols[2] == cols[0]))"
+        if ((cols[1] == cols[2]) and (cols[2] == cols[0]))
+         td: "✓"
+        else 
+         td: "X"
       )
     }
 
