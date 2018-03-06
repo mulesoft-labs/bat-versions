@@ -4,7 +4,7 @@ files:
 suite:
   name: "BAT Reports"
   triggers:
-    - cron: "0 0 0/1 1/1 * ? *" 
+    - cron: 0 * * * * 
 
 reporters:
   - file: reporters/Versions.dwl
