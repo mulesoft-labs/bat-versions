@@ -85,18 +85,53 @@ var config = {
       worker: {
         domain: 'https://bat-worker.stgx.msap.io'
       }
+    },
+    prod: {
+      analytics: {
+        domain: 'https://bat-analytics.prod.cloudhub.io'
+      },
+      artifacts: {
+        domain: 'https://bat-artifacts.prod.cloudhub.io'
+      },
+      analytics: {
+        domain: 'https://bat-analytics.prod.cloudhub.io'
+      },
+      results: {
+        domain: 'https://bat-results.prod.cloudhub.io'
+      },
+      scheduler: {
+        domain: 'https://bat-scheduler.prod.cloudhub.io'
+      },
+      execution: {
+        domain: 'https://bat-execution.prod.cloudhub.io'
+      },
+      cliXapi: {
+        domain: 'https://bat-cli-xapi.prod.cloudhub.io'
+      },
+      xapi: {
+        domain: 'https://bat-xapi.prod.cloudhub.io'
+      },
+      worker: {
+        domain: 'https://bat-worker.prod.cloudhub.io'
     }
   }
+}
 }
 
 fun array2obj(array: Array<Object>) =
   array reduce (item, carry = {}) -> carry ++ item
 
 fun findVersions(service: String) = do {
-  var cols = [
+  var colsDev = [
     GET `$(config.services.devx[service].domain)/v1/status` with {},
-    GET `$(config.services.qax[service].domain)/v1/status` with {},
-    GET `$(config.services.stgx[service].domain)/v1/status` with {}
+    GET `$(config.services.qax[service].domain)/v1/status` with {}
+  ] map {
+    td: "$($.result.response.body.version default 'Unknown')"
+  }
+
+  var colsProd = [
+    GET `$(config.services.stgx[service].domain)/v1/status` with {},
+    GET `$(config.services.prod[service].domain)/v1/status` with {}
   ] map {
     td: "$($.result.response.body.version default 'Unknown')"
   }
@@ -104,13 +139,16 @@ fun findVersions(service: String) = do {
 
     tr: {
       td: "$(service)",
-      (cols),
-      (
-        if ((cols[1] == cols[2]) and (cols[2] == cols[0]))
+      (colsDev),
+      (if (colsDev[1] == colsDev[0])
+
          td: "✓"
+
         else 
+
          td: "X"
-      )
+      ),
+      (colsProd)
     }
 
 }
@@ -155,9 +193,11 @@ fun findVersions(service: String) = do {
           th: 
             b: 'Qax',
           th: 
+            b: '✓/X',
+          th: 
             b: 'Stgx',
           th: 
-            b: 'Convergence'
+            b: 'Prod'
         },
         (findVersions('analytics')),
         (findVersions('artifacts')),
