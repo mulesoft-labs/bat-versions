@@ -1,8 +1,3 @@
-apiTests2()
-
-
-def apiTests2() { 
-   
 def jenkinsSteps() {
   wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
     def config, repoConfig = null
@@ -180,4 +175,3 @@ def jenkinsSteps() {
 }
 
 return this
-}
