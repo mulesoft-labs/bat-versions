@@ -64,9 +64,6 @@ var config = {
       artifacts: {
         domain: 'https://bat-artifacts.stgx.msap.io'
       },
-      analytics: {
-        domain: 'https://bat-analytics.stgx.msap.io'
-      },
       results: {
         domain: 'https://bat-results.stgx.msap.io'
       },
@@ -93,9 +90,6 @@ var config = {
       artifacts: {
         domain: 'https://bat-artifacts.prod.cloudhub.io'
       },
-      analytics: {
-        domain: 'https://bat-analytics.prod.cloudhub.io'
-      },
       results: {
         domain: 'https://bat-results.prod.cloudhub.io'
       },
@@ -114,6 +108,32 @@ var config = {
       worker: {
         domain: 'https://bat-worker.prod.cloudhub.io'
     }
+  },
+  prodeu: {
+      analytics: {
+        domain: 'https://bat-analytics.prod-eu.msap.io'
+      },
+      artifacts: {
+        domain: 'https://bat-artifacts.prod-eu.msap.io'
+      },
+      results: {
+        domain: 'https://bat-results.prod-eu.msap.io'
+      },
+      scheduler: {
+        domain: 'https://bat-scheduler.prod-eu.msap.io'
+      },
+      execution: {
+        domain: 'https://bat-execution.prod-eu.msap.io'
+      },
+      cliXapi: {
+        domain: 'https://bat-cli-xapi.prod-eu.msap.io'
+      },
+      xapi: {
+        domain: 'https://bat-xapi.prod-eu.msap.io'
+      },
+      worker: {
+        domain: 'https://bat-worker.prod-eu.msap.io'
+    }
   }
 }
 }
@@ -131,7 +151,8 @@ fun findVersions(service: String) = do {
 
   var colsProd = [
     GET `$(config.services.stgx[service].domain)/v1/status` with {},
-    GET `$(config.services.prod[service].domain)/v1/status` with {}
+    GET `$(config.services.prod[service].domain)/v1/status` with {},
+    GET `$(config.services.prodeu[service].domain)/v1/status` with {}
   ] map {
     td: "$($.result.response.body.version default 'Unknown')"
   }
@@ -197,7 +218,9 @@ fun findVersions(service: String) = do {
           th: 
             b: 'Stgx',
           th: 
-            b: 'Prod'
+            b: 'Prod',
+          th: 
+            b: 'Prod-EU'
         },
         (findVersions('analytics')),
         (findVersions('artifacts')),
