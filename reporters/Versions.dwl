@@ -83,32 +83,6 @@ var config = {
         domain: 'https://bat-worker.stgx.msap.io'
       }
     },
-    prod: {
-      analytics: {
-        domain: 'https://bat-analytics.prod.cloudhub.io'
-      },
-      artifacts: {
-        domain: 'https://bat-artifacts.prod.cloudhub.io'
-      },
-      results: {
-        domain: 'https://bat-results.prod.cloudhub.io'
-      },
-      scheduler: {
-        domain: 'https://bat-scheduler.prod.cloudhub.io'
-      },
-      execution: {
-        domain: 'https://bat-execution.prod.cloudhub.io'
-      },
-      cliXapi: {
-        domain: 'https://bat-cli-xapi.prod.cloudhub.io'
-      },
-      xapi: {
-        domain: 'https://bat-xapi.prod.cloudhub.io'
-      },
-      worker: {
-        domain: 'https://bat-worker.prod.cloudhub.io'
-    }
-  },
   prodeu: {
       analytics: {
         domain: 'https://bat-analytics.prod-eu.msap.io'
@@ -134,6 +108,32 @@ var config = {
       worker: {
         domain: 'https://bat-worker.prod-eu.msap.io'
     }
+  },
+  prod: {
+      analytics: {
+        domain: 'https://bat-analytics.prod.cloudhub.io'
+      },
+      artifacts: {
+        domain: 'https://bat-artifacts.prod.cloudhub.io'
+      },
+      results: {
+        domain: 'https://bat-results.prod.cloudhub.io'
+      },
+      scheduler: {
+        domain: 'https://bat-scheduler.prod.cloudhub.io'
+      },
+      execution: {
+        domain: 'https://bat-execution.prod.cloudhub.io'
+      },
+      cliXapi: {
+        domain: 'https://bat-cli-xapi.prod.cloudhub.io'
+      },
+      xapi: {
+        domain: 'https://bat-xapi.prod.cloudhub.io'
+      },
+      worker: {
+        domain: 'https://bat-worker.prod.cloudhub.io'
+    }
   }
 }
 }
@@ -151,8 +151,8 @@ fun findVersions(service: String) = do {
 
   var colsProd = [
     GET `$(config.services.stgx[service].domain)/v1/status` with {},
-    GET `$(config.services.prod[service].domain)/v1/status` with {},
-    GET `$(config.services.prodeu[service].domain)/v1/status` with {}
+    GET `$(config.services.prodeu[service].domain)/v1/status` with {},
+    GET `$(config.services.prod[service].domain)/v1/status` with {}
   ] map {
     td: "$($.result.response.body.version default 'Unknown')"
   }
@@ -218,9 +218,9 @@ fun findVersions(service: String) = do {
           th: 
             b: 'Stgx',
           th: 
-            b: 'Prod',
+            b: 'Prod-EU',
           th: 
-            b: 'Prod-EU'
+            b: 'Prod'
         },
         (findVersions('analytics')),
         (findVersions('artifacts')),
