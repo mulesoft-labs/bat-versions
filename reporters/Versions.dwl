@@ -149,9 +149,14 @@ fun findVersions(service: String) = do {
     td: "$($.result.response.body.version default 'Unknown')"
   }
 
-  var colsProd = [
+  var colsProdEu = [
     GET `$(config.services.stgx[service].domain)/v1/status` with {},
-    GET `$(config.services.prodeu[service].domain)/v1/status` with {},
+    GET `$(config.services.prodeu[service].domain)/v1/status` with {}
+  ] map {
+    td: "$($.result.response.body.version default 'Unknown')"
+  }
+
+  var colsProd = [
     GET `$(config.services.prod[service].domain)/v1/status` with {}
   ] map {
     td: "$($.result.response.body.version default 'Unknown')"
@@ -169,7 +174,24 @@ fun findVersions(service: String) = do {
 
          td: "X"
       ),
-      (colsProd)
+      (colsProdEu),
+      (if (colsProdEu[1] == colsProdEu[0])
+
+         td: "✓"
+
+        else 
+
+         td: "X"
+      ),
+      (colsProd),
+      (if (colsProd[0] == colsProdEu[0])
+
+         td: "✓"
+
+        else 
+
+         td: "X"
+      )      
     }
 
 }
@@ -220,7 +242,11 @@ fun findVersions(service: String) = do {
           th: 
             b: 'Prod-EU',
           th: 
-            b: 'Prod'
+            b: '✓/X',  
+          th: 
+            b: 'Prod',
+          th: 
+            b: '✓/X'  
         },
         (findVersions('analytics')),
         (findVersions('artifacts')),
